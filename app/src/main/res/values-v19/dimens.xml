@@ -1,0 +1,6 @@
+<resources>
+
+    <!-- 状态栏高度 -->
+    <dimen name="statusBarHeight">25dp</dimen>
+
+</resources>

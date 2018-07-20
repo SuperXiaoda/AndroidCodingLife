@@ -1,14 +1,20 @@
 apply plugin: 'com.android.application'
+// 版本配置
+def version = rootProject.ext.version
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion version.compileSdkVersion
     defaultConfig {
         applicationId "cn.com.brother.studio"
-        minSdkVersion 17
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        minSdkVersion version.minSdkVersion
+        targetSdkVersion version.targetSdkVersion
+        versionCode version.versionCode
+        versionName version.versionName
+
+        // 设置支持的so库架构
+        ndk {
+            abiFilters "armeabi"
+        }
     }
     buildTypes {
         release {
@@ -20,9 +26,38 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    /**
+     *   Android支持库
+     */
+    implementation "com.android.support:appcompat-v7:$version.supportLibraryVersion"
+    implementation "com.android.support:design:$version.supportLibraryVersion"
+    // RecyclerView
+    implementation "com.android.support:recyclerview-v7:$version.supportLibraryVersion"
+    implementation "com.android.support:cardview-v7:$version.supportLibraryVersion"
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    /*
     implementation 'com.android.support:appcompat-v7:28.0.0-alpha3'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    testImplementation 'junit:junit:4.12'
+
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'*/
+    /**
+     * 开发库
+     */
+    // 控件依赖注入（ButterKnife）
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    /**
+     * 工具库
+     */
+    // 状态栏颜色工具
+    implementation 'com.jaeger.statusbarutil:library:1.5.1'
+    /**
+     *   Module库
+     */
+    // Material风格底部导航控件
+    implementation project(':BottomNavigation')
 }

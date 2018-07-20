@@ -1,15 +1,27 @@
 package cn.com.brother.studio.activity;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
 import cn.com.brother.studio.R;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * Description: 主页
+ * author: LiangHD
+ * Date: 2018/7/20
+ */
+public class MainActivity extends BaseActivity {
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected int getContentView() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void init() {
+
+    }
+
+    @Override
+    protected void setListener() {
+
     }
 }
