@@ -10,4 +10,15 @@
     <color name="textColorHint">#999999</color>
     <color name="windowBackground">#FAFAFA</color>
     <color name="windowBackgroundGrey">#EEEEEE</color>
+    <color name="colorInactive">#999999</color>
+    <color name="colorDivider">#EEEEEE</color>
+    <color name="color_light">#ECEFF1</color>
+
+    <!-- 仪表盘颜色 -->
+    <color name="colorPrimary1">#0EA3AA</color>
+    <color name="colorRipple">#440EA3AA</color>
+    <color name="color_green">#82FF82</color>
+    <color name="color_blue">#4DFFFF</color>
+    <color name="color_red">#FF6969</color>
+
 </resources>

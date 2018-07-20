@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">AndroidCodingLife</string>
+
+    <!-- 主页 -->
+    <string name="ui">ui</string>
+
+    <!-- 视图 -->
+    <string name="dashboard">仪表盘</string>
+    <string name="dashboard_desc">自定义仪表盘控件，满足基本需求</string>
 </resources>

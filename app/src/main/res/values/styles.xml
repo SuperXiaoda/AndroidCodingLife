@@ -30,10 +30,11 @@
     <style name="StatusBar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/statusBarHeight</item>
+        <item name="android:background">@color/colorPrimary</item>
     </style>
 
-    <style name="StatusBar.WithBackground">
-        <item name="android:background">?attr/statusBarBackground</item>
-    </style>
+    <!--  <style name="StatusBar.WithBackground">
+          <item name="android:background">?attr/statusBarBackground</item>
+      </style>-->
 
 </resources>
