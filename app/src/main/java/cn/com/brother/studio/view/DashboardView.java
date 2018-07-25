@@ -157,7 +157,7 @@ public class DashboardView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawColor(ContextCompat.getColor(getContext(), R.color.colorPrimary1));
+        canvas.drawColor(ContextCompat.getColor(getContext(), R.color.color_break));
         /**
          * 画圆弧
          */
@@ -176,7 +176,7 @@ public class DashboardView extends View {
                 if (i == 0) {
                     canvas.drawArc(mRectFArc, mStartAngle, mSpaces, false, mPaint);
                 } else if (i == mColors.length - 1) {
-                    canvas.drawArc(mRectFArc, mStartAngle + mSpaces + middle * mSpaces, mSpaces, false, mPaint);
+                    canvas.drawArc(mRectFArc, mStartAngle + mSpaces + middle * mSpaces + 1, mSpaces, false, mPaint);
                 } else {
                     canvas.drawArc(mRectFArc, mStartAngle + (mSpaces * i), middle * mSpaces, false, mPaint);
                 }
@@ -230,6 +230,7 @@ public class DashboardView extends View {
         /**
          * 画指针
          */
+        mPaint1.setColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
         float θ = mStartAngle + mSweepAngle * (mRealTimeValue - mMin) / (mMax - mMin); // 指针与水平线夹角
         int d = dp2px(5); // 指针由两个等腰三角形构成，d为共底边长的一半
         mPath.reset();
@@ -244,13 +245,13 @@ public class DashboardView extends View {
         mPath.close();
         mPaint1.setStyle(Paint.Style.STROKE);
         mPaint1.setStrokeWidth(mStrokeWidth);
-
         canvas.drawPath(mPath, mPaint1);
 
         /**
          * 画长刻度读数
          * 添加一个圆弧path，文字沿着path绘制
          */
+        mPaint1.setColor(ContextCompat.getColor(getContext(), R.color.color_light));
         mPaint1.setTextSize(sp2px(10));
         mPaint1.setTextAlign(Paint.Align.LEFT);
         mPaint1.setStyle(Paint.Style.FILL);

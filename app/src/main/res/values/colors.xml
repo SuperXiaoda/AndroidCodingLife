@@ -13,6 +13,7 @@
     <color name="colorInactive">#999999</color>
     <color name="colorDivider">#EEEEEE</color>
     <color name="color_light">#ECEFF1</color>
+    <color name="color_break">#000</color>
 
     <!-- 仪表盘颜色 -->
     <color name="colorPrimary1">#0EA3AA</color>
