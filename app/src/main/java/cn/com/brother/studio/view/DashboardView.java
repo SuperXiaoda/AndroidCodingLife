@@ -26,33 +26,50 @@ import cn.com.brother.studio.R;
  */
 
 public class DashboardView extends View {
-    private int mRadius; // 扇形半径
-    private int mStartAngle = 150; // 起始角度
-    private int mSweepAngle = 240; // 绘制角度
-    private int mMin = 0; // 最小值
-    private int mMax = 180; // 最大值
-    private int mSection = 10; // 值域（mMax-mMin）等分份数
-    private int mPortion = 10; // 一个mSection等分份数
-    private String mHeaderText = ""; // 表头
-    private int mRealTimeValue = mMin; // 实时读数
-    private boolean isShowValue = true; // 是否显示实时读数
-    private int mStrokeWidth; // 画笔宽度
-    private int mLength1; // 长刻度的相对圆弧的长度
-    private int mLength2; // 刻度读数顶部的相对圆弧的长度
-
-    private int mPLRadius; // 指针长半径
-    private int mPSRadius; // 指针短半径
-
+    // 扇形半径
+    private int mRadius;
+    // 起始角度
+    private int mStartAngle = 150;
+    // 绘制角度
+    private int mSweepAngle = 240;
+    // 最小值
+    private int mMin = 0;
+    // 最大值
+    private int mMax = 180;
+    // 值域（mMax-mMin）等分份数
+    private int mSection = 10;
+    // 一个mSection等分份数
+    private int mPortion = 10;
+    // 表头
+    private String mHeaderText = "";
+    // 实时读数
+    private int mRealTimeValue = mMin;
+    // 是否显示实时读数
+    private boolean isShowValue = true;
+    // 画笔宽度
+    private int mStrokeWidth;
+    // 长刻度的相对圆弧的长度
+    private int mLength1;
+    // 刻度读数顶部的相对圆弧的长度
+    private int mLength2;
+    // 指针长半径
+    private int mPLRadius;
+    // 指针短半径
+    private int mPSRadius;
     private int mPadding;
-    private float mCenterX, mCenterY; // 圆心坐标
+    // 圆心坐标
+    private float mCenterX, mCenterY;
     private Paint mPaint;
     private Paint mPaint1;
-    private Paint mPaint2;
     private RectF mRectFArc;
     private Path mPath;
     private RectF mRectFInnerArc;
     private Rect mRectText;
+    // 刻度读数
     private String[] mTexts;
+    // 背景颜色
+    private int mBackgroundColor;
+    // 弧线颜色数组
     private int[] mColors;
 
     public DashboardView(Context context) {
@@ -83,9 +100,6 @@ public class DashboardView extends View {
         mPaint1.setAntiAlias(true);
         mPaint1.setStrokeCap(Paint.Cap.ROUND);
 
-        mPaint2 = new Paint();
-        mPaint2.setAntiAlias(true);
-        mPaint2.setStrokeCap(Paint.Cap.ROUND);
 
         mRectFArc = new RectF();
         mPath = new Path();
@@ -161,7 +175,6 @@ public class DashboardView extends View {
         /**
          * 画圆弧
          */
-
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setColor(Color.BLACK);
         mPaint.setAlpha(255);
@@ -303,6 +316,9 @@ public class DashboardView extends View {
         }
     }
 
+    /**
+     * 设置渐变色
+     **/
     private SweepGradient generateSweepGradient() {
         SweepGradient sweepGradient = new SweepGradient(mCenterX, mCenterY,
                 mColors,
@@ -367,9 +383,15 @@ public class DashboardView extends View {
         if (mRealTimeValue == realTimeValue || realTimeValue < mMin || realTimeValue > mMax) {
             return;
         }
-
         mRealTimeValue = realTimeValue;
         postInvalidate();
+    }
+
+    /**
+     * 设置仪表背景颜色
+     */
+    public void setBackgroundColor(int color){
+            this.mBackgroundColor = color;
     }
 
 }

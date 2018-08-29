@@ -13,6 +13,7 @@ import java.util.List;
 import butterknife.BindView;
 import cn.com.brother.studio.R;
 import cn.com.brother.studio.fragment.CustomUiFragment;
+import cn.com.brother.studio.fragment.FunctionFragment;
 import cn.com.brother.studio.view.FixViewPager;
 
 /**
@@ -44,10 +45,14 @@ public class MainActivity extends BaseActivity {
         mBottomNavigation.setInactiveColor(ContextCompat.getColor(getApplicationContext(), R.color.colorInactive));
 
         mBottomNavigation.addItem(new AHBottomNavigationItem(R.string.ui, R.drawable.ic_custom_view));
+        mBottomNavigation.addItem(new AHBottomNavigationItem(R.string.function, R.drawable.ic_custom_view));
 
-        // 列车
+        // 自定义视图
         CustomUiFragment customUiFragment = new CustomUiFragment();
         mTabs.add(customUiFragment);
+        // 功能模块
+        FunctionFragment functionFragment = new FunctionFragment();
+        mTabs.add(functionFragment);
         // 界面适配器
         FragmentPagerAdapter mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
 
@@ -72,5 +77,13 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void setListener() {
 
+        mBottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(int position, boolean wasSelected) {
+                if (!wasSelected) {
+                    mMainViewPager.setCurrentItem(position, false); // 切换ViewPager
+                }
+            }
+        });
     }
 }

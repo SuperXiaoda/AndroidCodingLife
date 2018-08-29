@@ -11,9 +11,9 @@ import cn.com.brother.studio.model.Function;
  * author: LiangHD
  * Date: 2018/7/20
  */
-public class CustomViewAdapter extends BaseQuickAdapter<Function, BaseViewHolder> {
+public class FunctionAdapter extends BaseQuickAdapter<Function, BaseViewHolder> {
 
-    public CustomViewAdapter() {
+    public FunctionAdapter() {
         super(R.layout.item_custom_ui, null);
     }
 

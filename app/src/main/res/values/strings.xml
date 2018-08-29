@@ -3,6 +3,7 @@
 
     <!-- 主页 -->
     <string name="ui">ui</string>
+    <string name="function">功能</string>
 
     <!-- 视图 -->
     <string name="dashboard">仪表盘</string>
@@ -14,4 +15,10 @@
     <string name="real_time_value_hint">请输入当前数值</string>
     <string name="sure">确定</string>
     <string name="min_max_prompt">最大值不能小于最小值</string>
+    
+    <!-- 功能 -->
+    <string name="distinguish">识别文字</string>
+    <string name="distinguish_desc">识别图片中文字</string>
+    <!-- 识别文字-->
+    <string name="show_suspension">是否显示悬浮窗口</string>
 </resources>
