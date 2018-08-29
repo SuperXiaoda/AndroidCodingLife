@@ -18,4 +18,8 @@ public class App extends Application {
         mInstance = this;
     }
 
+    // 获取实例
+    public static App getInstance() {
+        return mInstance;
+    }
 }

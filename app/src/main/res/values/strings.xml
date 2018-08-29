@@ -7,4 +7,11 @@
     <!-- 视图 -->
     <string name="dashboard">仪表盘</string>
     <string name="dashboard_desc">自定义仪表盘控件，满足基本需求</string>
+    <!-- 仪表盘控件 -->
+    <string name="min_value_hint">请输入最小值</string>
+    <string name="max_value_hint">请输入最大值</string>
+    <string name="number_of_copies_hint">切分份数</string>
+    <string name="real_time_value_hint">请输入当前数值</string>
+    <string name="sure">确定</string>
+    <string name="min_max_prompt">最大值不能小于最小值</string>
 </resources>
