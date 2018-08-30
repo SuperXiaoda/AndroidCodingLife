@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.Gravity;
@@ -33,9 +31,7 @@ public class DistinguishService extends Service {
     private LinearLayout mDistinguishLayout;
     private WindowManager.LayoutParams params;
     private WindowManager windowManager;
-
     private AppCompatButton mButton;
-
     //状态栏高度.
     int statusBarHeight = -1;
 
@@ -69,7 +65,7 @@ public class DistinguishService extends Service {
         params.y = 0;
 
         //设置悬浮窗口长宽数据.
-       params.width = 300;
+        params.width = 300;
         params.height = 300;
 
         LayoutInflater inflater = LayoutInflater.from(getApplication());
@@ -90,38 +86,47 @@ public class DistinguishService extends Service {
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
             statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+
         }
         Log.i(TAG, "状态栏高度为:" + statusBarHeight);
 
         //浮动窗口按钮.
-        mButton =  mDistinguishLayout.findViewById(R.id.distinguish_btn);
+        mButton = mDistinguishLayout.findViewById(R.id.distinguish_btn);
 
         mButton.setOnClickListener(new View.OnClickListener() {
             long[] hints = new long[2];
 
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "点击了");
-               System.arraycopy(hints, 1, hints, 0, hints.length - 1);
-                hints[hints.length - 1] = SystemClock.uptimeMillis();
-                if (SystemClock.uptimeMillis() - hints[0] >= 700) {
-                    Log.i(TAG, "要执行");
-                    ToastUtil.showShort("连续点击两次");
-                } else {
-                    Log.i(TAG, "即将关闭");
-                   // stopSelf();
-                }
+                ToastUtil.showShort("被点击");
+
             }
         });
+
 
         mButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                float stratX = 0;
+                float startY = 0;
+
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    stratX = event.getRawX();
+                    startY = event.getRawY();
+                    Log.d(TAG, "down  x----->" + stratX + "--------y----->" + startY);
+                }
                 // 判断点击时间类型
-                if (event.getAction()==MotionEvent.ACTION_MOVE){
-                    params.x = (int) event.getRawX();
-                    params.y = (int) event.getRawY();
-                    windowManager.updateViewLayout(mDistinguishLayout, params);
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    Log.d(TAG, "move  x----->" + event.getRawX() + "--------y----->" + event.getRawY());
+                    if (Math.abs(event.getRawX() - stratX) > 50 || Math.abs(event.getRawY() - startY) > 50) {
+
+                        params.x = (int) event.getRawX();
+                        params.y = (int) event.getRawY() - statusBarHeight;
+                        windowManager.updateViewLayout(mDistinguishLayout, params);
+                    }
+                }
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+
                 }
                 return false;
             }
