@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">AndroidCodingLife</string>
+    <!-- 通用-->
+    <string name="prompt">提示</string>
+    <string name="cancel">取消</string>
 
     <!-- 主页 -->
     <string name="ui">ui</string>
@@ -21,4 +24,5 @@
     <string name="distinguish_desc">识别图片中文字</string>
     <!-- 识别文字-->
     <string name="show_suspension">是否显示悬浮窗口</string>
+    <string name="suspension_prompt">需要授予显示在其他应用上的权限！</string>
 </resources>

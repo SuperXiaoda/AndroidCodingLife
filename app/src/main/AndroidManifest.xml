@@ -41,6 +41,9 @@
             android:configChanges="keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+
+        <!-- 悬浮框服务 -->
+        <service android:name=".service.DistinguishService" />
     </application>
 
 </manifest>

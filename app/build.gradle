@@ -57,6 +57,10 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.40'
     // RecyclerView Divider
     implementation 'com.yqritc:recyclerview-flexibledivider:1.4.0'
+    // Material风格Dialog
+    implementation('com.afollestad.material-dialogs:core:0.9.5.0') {
+        exclude group: 'com.android.support'
+    }
     /**
      *   Module库
      */
