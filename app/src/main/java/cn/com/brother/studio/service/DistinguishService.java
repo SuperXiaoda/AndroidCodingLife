@@ -64,12 +64,12 @@ public class DistinguishService extends Service {
         params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
         //设置窗口初始停靠位置.
-        params.gravity = Gravity.LEFT | Gravity.TOP;
+        params.gravity = Gravity.START | Gravity.TOP;
         params.x = 0;
         params.y = 0;
 
         //设置悬浮窗口长宽数据.
-        params.width = 300;
+       params.width = 300;
         params.height = 300;
 
         LayoutInflater inflater = LayoutInflater.from(getApplication());
@@ -94,7 +94,7 @@ public class DistinguishService extends Service {
         Log.i(TAG, "状态栏高度为:" + statusBarHeight);
 
         //浮动窗口按钮.
-        mButton = (AppCompatButton) mDistinguishLayout.findViewById(R.id.distinguish_btn);
+        mButton =  mDistinguishLayout.findViewById(R.id.distinguish_btn);
 
         mButton.setOnClickListener(new View.OnClickListener() {
             long[] hints = new long[2];
@@ -102,14 +102,14 @@ public class DistinguishService extends Service {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "点击了");
-                System.arraycopy(hints, 1, hints, 0, hints.length - 1);
+               System.arraycopy(hints, 1, hints, 0, hints.length - 1);
                 hints[hints.length - 1] = SystemClock.uptimeMillis();
                 if (SystemClock.uptimeMillis() - hints[0] >= 700) {
                     Log.i(TAG, "要执行");
                     ToastUtil.showShort("连续点击两次");
                 } else {
                     Log.i(TAG, "即将关闭");
-                    stopSelf();
+                   // stopSelf();
                 }
             }
         });
@@ -117,9 +117,12 @@ public class DistinguishService extends Service {
         mButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                params.x = (int) event.getRawX() - 150;
-                params.y = (int) event.getRawY() - 150 - statusBarHeight;
-                windowManager.updateViewLayout(mDistinguishLayout, params);
+                // 判断点击时间类型
+                if (event.getAction()==MotionEvent.ACTION_MOVE){
+                    params.x = (int) event.getRawX();
+                    params.y = (int) event.getRawY();
+                    windowManager.updateViewLayout(mDistinguishLayout, params);
+                }
                 return false;
             }
         });

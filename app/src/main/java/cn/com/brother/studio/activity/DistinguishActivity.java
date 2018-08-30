@@ -55,12 +55,11 @@ public class DistinguishActivity extends BaseActivity implements View.OnClickLis
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Intent intent = new Intent(DistinguishActivity.this, DistinguishService.class);
                 if (isChecked) {
                     if (Settings.canDrawOverlays(DistinguishActivity.this)) {
-                        Intent intent = new Intent(DistinguishActivity.this, DistinguishService.class);
                         startService(intent);
                     } else {
-
                         new MaterialDialog.Builder(DistinguishActivity.this)
                                 .title(R.string.prompt)
                                 .content(R.string.suspension_prompt)
@@ -83,6 +82,8 @@ public class DistinguishActivity extends BaseActivity implements View.OnClickLis
                                 .show();
 
                     }
+                } else {
+                    stopService(intent);
                 }
             }
         });
