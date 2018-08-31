@@ -1,11 +1,17 @@
 package cn.com.brother.studio.service;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
+import android.media.projection.MediaProjectionManager;
+import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.Gravity;
@@ -15,6 +21,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import java.io.FileOutputStream;
 
 import cn.com.brother.studio.R;
 import cn.com.brother.studio.util.ToastUtil;
@@ -27,6 +35,8 @@ import cn.com.brother.studio.view.CustomButton;
  */
 public class DistinguishService extends Service {
 
+    private DistinguishBinder distinguishBinder=new DistinguishBinder();
+
     // TAG
     private static final String TAG = "DistinguishService";
     // 悬浮窗体布局
@@ -37,10 +47,13 @@ public class DistinguishService extends Service {
     //状态栏高度.
     int statusBarHeight = -1;
 
+    // 页面
+    private Activity mActivity;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return distinguishBinder;
     }
 
     @Override
@@ -67,19 +80,14 @@ public class DistinguishService extends Service {
         params.y = 0;
 
         //设置悬浮窗口长宽数据.
-        params.width =  WindowManager.LayoutParams.WRAP_CONTENT;
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT-50;
+        params.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT - 50;
 
         LayoutInflater inflater = LayoutInflater.from(getApplication());
         //获取浮动窗口视图所在布局.
         mDistinguishLayout = (LinearLayout) inflater.inflate(R.layout.layout_distinguish, null);
         //添加悬浮窗体布局
         windowManager.addView(mDistinguishLayout, params);
-
-        Log.i(TAG, "toucherlayout-->left:" + mDistinguishLayout.getLeft());
-        Log.i(TAG, "toucherlayout-->right:" + mDistinguishLayout.getRight());
-        Log.i(TAG, "toucherlayout-->top:" + mDistinguishLayout.getTop());
-        Log.i(TAG, "toucherlayout-->bottom:" + mDistinguishLayout.getBottom());
 
         //主动计算出当前View的宽高信息.
         mDistinguishLayout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
@@ -96,45 +104,23 @@ public class DistinguishService extends Service {
         mButton = mDistinguishLayout.findViewById(R.id.distinguish_btn);
 
         mButton.setOnClickListener(new View.OnClickListener() {
-            long[] hints = new long[2];
-
+            // @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
-                if (!mButton.isDrag()) {
-                    ToastUtil.showShort("被点击");
+              /*  if (!mButton.isDrag()) {
+                    final MediaProjectionManager projectionManager = (MediaProjectionManager)
+                            getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+                    Intent intent = projectionManager.createScreenCaptureIntent();
+                    mActivity.startActivityForResult(intent, REQUEST_CODE);
+                }*/
+                if (mOnButtonClickLister != null) {
+                    mOnButtonClickLister.onButtonClick();
                 }
 
             }
         });
 
 
-       /* mButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                float stratX = 0;
-                float startY = 0;
-
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    stratX = event.getRawX();
-                    startY = event.getRawY();
-                    Log.d(TAG, "down  x----->" + stratX + "--------y----->" + startY);
-                }
-                // 判断点击时间类型
-                if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                    Log.d(TAG, "move  x----->" + event.getRawX() + "--------y----->" + event.getRawY());
-                    if (Math.abs(event.getRawX() - stratX) > 50 || Math.abs(event.getRawY() - startY) > 50) {
-
-                        params.x = (int) event.getRawX();
-                        params.y = (int) event.getRawY() - statusBarHeight;
-                        windowManager.updateViewLayout(mDistinguishLayout, params);
-                    }
-                }
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-
-                }
-                return false;
-            }
-        });*/
     }
 
     @Override
@@ -143,5 +129,51 @@ public class DistinguishService extends Service {
             windowManager.removeView(mDistinguishLayout);
         }
         super.onDestroy();
+    }
+
+    public void printScreen(View view) {
+        String imgPath = "/sdcard/test.png";
+        view.setDrawingCacheEnabled(true);
+        view.buildDrawingCache();
+        Bitmap bitmap = view.getDrawingCache();
+        if (bitmap != null) {
+            try {
+                FileOutputStream out = new FileOutputStream(imgPath);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100,
+                        out);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private OnButtonClickLister mOnButtonClickLister;
+
+    public void setOnItemClickLister(OnButtonClickLister onButtonClickLister) {
+        this.mOnButtonClickLister = onButtonClickLister;
+    }
+
+    /**
+     * 按钮点击监听
+     */
+    public interface OnButtonClickLister {
+
+        // 按钮点击监听
+        void onButtonClick();
+    }
+
+    /**
+     * 内部类继承Binder
+     * @author lenovo
+     *
+     */
+    public class DistinguishBinder extends Binder {
+        /**
+         * 声明方法返回值是MyService本身
+         * @return
+         */
+        public DistinguishService getService() {
+            return DistinguishService.this;
+        }
     }
 }

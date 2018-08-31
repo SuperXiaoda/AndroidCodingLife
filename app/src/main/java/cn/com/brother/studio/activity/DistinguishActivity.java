@@ -1,7 +1,13 @@
 package cn.com.brother.studio.activity;
 
+import android.annotation.TargetApi;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.media.projection.MediaProjectionManager;
 import android.os.Build;
+import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -19,6 +25,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import cn.com.brother.studio.R;
 import cn.com.brother.studio.service.DistinguishService;
+import cn.com.brother.studio.util.ToastUtil;
 
 /**
  * Description: 识别文字页面
@@ -36,6 +43,10 @@ public class DistinguishActivity extends BaseActivity implements View.OnClickLis
     // 显示悬浮框
     @BindView(R.id.suspension_switch)
     SwitchCompat mSuspensionSwitch;
+    // 服务bind
+    private DistinguishService.DistinguishBinder mDistinguishBinder;
+    // 截屏请求码
+    private static final int REQUEST_MEDIA_PROJECTION = 1001;
 
     @Override
     protected int getContentView() {
@@ -58,7 +69,8 @@ public class DistinguishActivity extends BaseActivity implements View.OnClickLis
                 Intent intent = new Intent(DistinguishActivity.this, DistinguishService.class);
                 if (isChecked) {
                     if (Settings.canDrawOverlays(DistinguishActivity.this)) {
-                        startService(intent);
+                        bindService(intent, connection, BIND_AUTO_CREATE);
+                        // startService(intent);
                     } else {
                         new MaterialDialog.Builder(DistinguishActivity.this)
                                 .title(R.string.prompt)
@@ -83,7 +95,7 @@ public class DistinguishActivity extends BaseActivity implements View.OnClickLis
 
                     }
                 } else {
-                    stopService(intent);
+                    unbindService(connection);
                 }
             }
         });
@@ -105,4 +117,68 @@ public class DistinguishActivity extends BaseActivity implements View.OnClickLis
         super.onResume();
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case REQUEST_MEDIA_PROJECTION:
+
+                break;
+        }
+    }
+
+
+
+    // 判断是否5.0以上系统
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void requestCapturePermission() {
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            //5.0 之后才允许使用屏幕截图
+            ToastUtil.showShort("本系统版本不支持截屏功能");
+            return;
+        }
+
+        MediaProjectionManager mediaProjectionManager = (MediaProjectionManager)
+                getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        startActivityForResult(
+                mediaProjectionManager.createScreenCaptureIntent(),
+                REQUEST_MEDIA_PROJECTION);
+    }
+
+
+    private ServiceConnection connection = new ServiceConnection() {
+        /**
+         * 服务解除绑定时候调用
+         */
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            // TODO Auto-generated method stub
+
+        }
+
+        /**
+         * 绑定服务的时候调用
+         */
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            // TODO Auto-generated method stub
+            mDistinguishBinder = (DistinguishService.DistinguishBinder) service;
+            DistinguishService distinguishService = mDistinguishBinder.getService();
+            /**
+             * 实现回调，得到实时刷新的数据
+             */
+            distinguishService.setOnItemClickLister(new DistinguishService.OnButtonClickLister() {
+                @Override
+                public void onButtonClick() {
+                    ToastUtil.showShort("按钮被点击");
+                    requestCapturePermission();
+                }
+            });
+        }
+    };
+
+
 }
