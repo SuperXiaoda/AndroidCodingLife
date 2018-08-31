@@ -14,9 +14,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import cn.com.brother.studio.R;
 import cn.com.brother.studio.util.ToastUtil;
+import cn.com.brother.studio.view.CustomButton;
 
 /**
  * Description: 悬浮框service
@@ -31,7 +33,7 @@ public class DistinguishService extends Service {
     private LinearLayout mDistinguishLayout;
     private WindowManager.LayoutParams params;
     private WindowManager windowManager;
-    private AppCompatButton mButton;
+    private CustomButton mButton;
     //状态栏高度.
     int statusBarHeight = -1;
 
@@ -60,13 +62,13 @@ public class DistinguishService extends Service {
         params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
         //设置窗口初始停靠位置.
-        params.gravity = Gravity.START | Gravity.TOP;
+        params.gravity = Gravity.END | Gravity.BOTTOM;
         params.x = 0;
         params.y = 0;
 
         //设置悬浮窗口长宽数据.
-        params.width = 300;
-        params.height = 300;
+        params.width =  WindowManager.LayoutParams.WRAP_CONTENT;
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT-50;
 
         LayoutInflater inflater = LayoutInflater.from(getApplication());
         //获取浮动窗口视图所在布局.
@@ -98,13 +100,15 @@ public class DistinguishService extends Service {
 
             @Override
             public void onClick(View v) {
-                ToastUtil.showShort("被点击");
+                if (!mButton.isDrag()) {
+                    ToastUtil.showShort("被点击");
+                }
 
             }
         });
 
 
-        mButton.setOnTouchListener(new View.OnTouchListener() {
+       /* mButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 float stratX = 0;
@@ -130,7 +134,7 @@ public class DistinguishService extends Service {
                 }
                 return false;
             }
-        });
+        });*/
     }
 
     @Override

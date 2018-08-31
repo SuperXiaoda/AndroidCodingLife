@@ -6,6 +6,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import cn.com.brother.studio.util.ScreenUtil;
+
 /**
  * Description: 自定义按钮
  * author: LiangHD
@@ -31,23 +33,27 @@ public class CustomButton extends AppCompatButton {
 
     public CustomButton(Context context) {
         super(context);
+        this.context=context;
     }
 
     public CustomButton(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context=context;
     }
 
     public CustomButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.context=context;
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        width = getMeasuredWidth();
-        height = getMeasuredHeight();
-        screenWidth =0;// ScreenUtil.getScreenWidth(context);
-        screenHeight =0; //ScreenUtil.getScreenHeight(context) - getStatusBarHeight();
+        width=getMeasuredWidth();
+        height=getMeasuredHeight();
+        screenWidth= ScreenUtil.getScreenWidth(context);
+        screenHeight=ScreenUtil.getScreenHeight(context)-getStatusBarHeight();
+
 
     }
 

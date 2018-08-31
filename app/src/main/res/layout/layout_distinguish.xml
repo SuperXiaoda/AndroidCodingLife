@@ -7,7 +7,7 @@
     android:foreground="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
-    <android.support.v7.widget.AppCompatButton
+    <cn.com.brother.studio.view.CustomButton
         android:id="@+id/distinguish_btn"
         android:layout_width="40dp"
         android:layout_height="40dp"
